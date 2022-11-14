@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_ecom_app_customer/pages/home_page.dart';
 import 'package:flutter_ecom_app_customer/pages/launcher_page.dart';
 import 'package:flutter_ecom_app_customer/pages/login_page.dart';
 import 'package:flutter_ecom_app_customer/pages/order_page.dart';
@@ -36,10 +37,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: LauncherPage.routeName,
+      initialRoute: Homepage.routeName,
       routes: {
         LauncherPage.routeName: (_) => const LauncherPage(),
         LoginPage.routeName: (_) => const LoginPage(),
+        Homepage.routeName: (_) => const Homepage(),
         OrderPage.routeName: (_) => const OrderPage(),
         ProductDetailsPage.routeName: (_) => const ProductDetailsPage(),
         ViewProductPage.routeName: (_) => const ViewProductPage(),
