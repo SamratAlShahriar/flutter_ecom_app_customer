@@ -15,6 +15,7 @@ const String productFieldAvgRating = 'product_avg_rating';
 const String productFieldDiscount = 'product_discount';
 const String productFieldThumbnail = 'product_thumbnail';
 const String productFieldImages = 'product_images';
+const String productFieldTags = 'product_tags';
 const String productFieldAvailable = 'product_available';
 const String productFieldFeatured = 'product_featured';
 
@@ -31,6 +32,7 @@ class ProductModel {
   num productDiscount;
   String thumbnailImageUrl;
   List<String> additionalImages;
+  List<String> tags;
   bool available;
   bool featured;
 
@@ -47,6 +49,7 @@ class ProductModel {
       this.productDiscount = 0,
       required this.thumbnailImageUrl,
       this.additionalImages = const <String>[],
+      this.tags = const <String>[],
       this.available = true,
       this.featured = false});
 
@@ -64,6 +67,7 @@ class ProductModel {
       productFieldDiscount: productDiscount,
       productFieldThumbnail: thumbnailImageUrl,
       productFieldImages: additionalImages,
+      productFieldTags: tags,
       productFieldAvailable: available,
       productFieldFeatured: featured,
     };
@@ -85,7 +89,9 @@ class ProductModel {
       stock: map[productFieldStock],
       avgRating: map[productFieldAvgRating],
       thumbnailImageUrl: map[productFieldThumbnail],
-      additionalImages: (map[productFieldImages] as List).map((e) => e.toString()).toList(),
+      additionalImages:
+          (map[productFieldImages] as List).map((e) => e.toString()).toList(),
+      tags: (map[productFieldTags] as List).map((e) => e.toString()).toList(),
       available: map[productFieldAvailable],
       featured: map[productFieldFeatured],
     );

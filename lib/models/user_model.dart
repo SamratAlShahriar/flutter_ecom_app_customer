@@ -9,7 +9,7 @@ const String userFieldUserAddress = 'user_address';
 const String userFieldUserCreationTime = 'user_creation_time';
 const String userFieldUserImageUrl = 'user_image_url';
 const String userFieldUserGender = 'user_gender';
-const String userFieldUserAge = 'user_age';
+const String userFieldUserDOB = 'user_dob';
 const String userFieldUserPhone = 'user_phone';
 const String userFieldUserEmail = 'user_email';
 
@@ -20,7 +20,7 @@ class UserModel {
   Timestamp? userCreationTIme;
   String? userImageUrl;
   String? gender;
-  num? age;
+  String? dob;
   String? phone;
   String email;
 
@@ -31,7 +31,7 @@ class UserModel {
     this.userCreationTIme,
     this.userImageUrl,
     this.gender,
-    this.age,
+    this.dob,
     this.phone,
     required this.email,
   });
@@ -44,7 +44,7 @@ class UserModel {
       userFieldUserCreationTime: userCreationTIme,
       userFieldUserImageUrl: userImageUrl,
       userFieldUserGender: gender,
-      userFieldUserAge: age,
+      userFieldUserDOB: dob,
       userFieldUserPhone: phone,
       userFieldUserEmail: email,
     };
@@ -60,7 +60,7 @@ class UserModel {
       userCreationTIme: map[userFieldUserCreationTime],
       userImageUrl: map[userFieldUserImageUrl],
       gender: map[userFieldUserGender],
-      age: map[userFieldUserAge],
+      dob: map[userFieldUserDOB],
       phone: map[userFieldUserPhone],
       email: map[userFieldUserEmail],
     );

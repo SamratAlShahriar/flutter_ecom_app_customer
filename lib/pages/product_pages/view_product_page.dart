@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ecom_app_customer/pages/product_details_page.dart';
+import 'package:flutter_ecom_app_customer/pages/product_pages/product_details_page.dart';
+import 'package:flutter_ecom_app_customer/providers/order_provider.dart';
+import 'package:flutter_ecom_app_customer/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../models/category_model.dart';
-import '../providers/product_provider.dart';
+import '../../models/category_model.dart';
+import '../../providers/product_provider.dart';
 
 class ViewProductPage extends StatefulWidget {
   static const String routeName = '/view_product_page';
@@ -21,7 +23,10 @@ class _ViewProductPageState extends State<ViewProductPage> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
-
+    Provider.of<ProductProvider>(context, listen: false).getAllCategories();
+    Provider.of<ProductProvider>(context, listen: false).getAllProducts();
+    Provider.of<OrderProvider>(context, listen: false).getOrderConstants();
+    Provider.of<UserProvider>(context, listen: false).getUserInfo();
     super.didChangeDependencies();
   }
 

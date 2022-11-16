@@ -6,11 +6,11 @@ const String addressFieldZipCode = 'address_zipcode';
 const String addressFieldType = 'address_type';
 
 class AddressModel {
-  String addressLine1;
+  String? addressLine1;
   String? addressLine2;
-  String city;
-  String zipCode;
-  String addressType;
+  String? city;
+  String? zipCode;
+  String? addressType;
 
   AddressModel({
     required this.addressLine1,
@@ -34,7 +34,7 @@ class AddressModel {
     return AddressModel(
       addressLine1: map[addressFieldAddressLine1],
       addressLine2: map[addressFieldAddressLine2],
-      city: map[addressFieldAddressLine2],
+      city: map[addressFieldCity],
       zipCode: map[addressFieldZipCode],
       addressType: map[addressFieldType],
     );

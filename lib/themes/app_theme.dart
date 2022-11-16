@@ -9,11 +9,11 @@ ThemeData _buildAppThemeLight() {
 
   return base.copyWith(
     colorScheme: base.colorScheme.copyWith(
-      primary: Colors.orange,
-      secondary: Colors.orange,
+      primary: Colors.deepOrange,
+      secondary: Colors.deepOrange,
       error: Colors.red,
     ),
-    scaffoldBackgroundColor: kColorSurfaceWhite,
+    scaffoldBackgroundColor: Colors.white,
     textSelectionTheme: const TextSelectionThemeData(
       selectionColor: Colors.deepOrange,
     ),

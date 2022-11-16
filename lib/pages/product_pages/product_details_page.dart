@@ -4,12 +4,12 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../custom_widgets/additional_image_view_item.dart';
-import '../models/product_model.dart';
-import '../providers/product_provider.dart';
-import '../utils/constants_values.dart';
-import '../utils/helper_functions.dart';
-import '../utils/widget_functions.dart';
+import '../../custom_widgets/additional_image_view_item.dart';
+import '../../models/product_model.dart';
+import '../../providers/product_provider.dart';
+import '../../utils/constants_values.dart';
+import '../../utils/helper_functions.dart';
+import '../../utils/widget_functions.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   static const String routeName = '/product_details_page';

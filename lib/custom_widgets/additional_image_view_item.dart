@@ -8,7 +8,6 @@ class AdditionalImageViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(8.0),
-
       width: 80,
       height: 80,
       alignment: Alignment.center,
