@@ -77,6 +77,7 @@ class ProductModel {
     return ProductModel(
       productId: map[productFieldId],
       productName: map[productFieldName],
+
       category: CategoryModel.fromMap(map[productFieldCategory]),
       descriptions: map[productFieldDescription] == null
           ? null
@@ -88,6 +89,7 @@ class ProductModel {
       salePrice: map[productFieldSalePrice],
       stock: map[productFieldStock],
       avgRating: map[productFieldAvgRating],
+      productDiscount: map[productFieldDiscount],
       thumbnailImageUrl: map[productFieldThumbnail],
       additionalImages:
           (map[productFieldImages] as List).map((e) => e.toString()).toList(),

@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../../providers/order_provider.dart';
 import '../../providers/product_provider.dart';
 import '../../providers/user_provider.dart';
+import '../order_pages/wishlist_page.dart';
 
 class MainNavPage extends StatefulWidget {
   static const String routeName = '/main_nav';
@@ -66,7 +67,7 @@ class _MainNavPageState extends State<MainNavPage> {
           children: const [
             Homepage(),
             SearchPage(),
-            ViewProductPage(),
+            WishListPage(),
             UserProfilePage(),
           ],
         ),

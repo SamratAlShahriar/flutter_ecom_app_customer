@@ -57,12 +57,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: productModel.additionalImages.isEmpty
-                    ? 1
-                    : productModel.additionalImages.length + 1,
+                itemCount: productModel.additionalImages.length,
                 itemBuilder: (context, index) {
-                  if (productModel.additionalImages.isNotEmpty &&
-                      index < productModel.additionalImages.length) {
                     return AdditionalImageViewItem(
                       child: InkWell(
                         onTap: () {
@@ -81,16 +77,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         ),
                       ),
                     );
-                  }
-                  return AdditionalImageViewItem(
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.add,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      onPressed: _addImage,
-                    ),
-                  );
                 },
               ),
             ),

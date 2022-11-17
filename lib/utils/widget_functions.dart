@@ -29,8 +29,9 @@ void showSingleTextInputDialog({
         TextButton(
           onPressed: () {
             if (txtController.text.isEmpty) return;
-            onSubmit(txtController.text);
+            final phone = txtController.text;
             Navigator.pop(context);
+            onSubmit(phone);
           },
           child: Text(positiveButtonText),
         ),

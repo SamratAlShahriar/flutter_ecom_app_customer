@@ -1,14 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../firebase_db_helper.dart';
-
 class AuthService {
   static final _auth = FirebaseAuth.instance;
 
   static User? get currentUser => _auth.currentUser;
 
-  static GoogleSignInAccount? _googleUser;
+  static GoogleSignInAccount? googleUser;
 
   static Future<UserCredential> login(String email, String password) async {
     final credential = await _auth.signInWithEmailAndPassword(
@@ -24,11 +22,11 @@ class AuthService {
 
   static Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
-    _googleUser = await GoogleSignIn().signIn();
+    googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
-        await _googleUser?.authentication;
+        await googleUser?.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
@@ -54,7 +52,7 @@ class AuthService {
         return await currentUser!.delete();
       }
 
-      if (_googleUser != null) {
+      if (googleUser != null) {
         await GoogleSignIn().signOut();
       }
 

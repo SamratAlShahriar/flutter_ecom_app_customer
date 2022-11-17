@@ -7,6 +7,7 @@ import 'package:flutter_ecom_app_customer/models/user_model.dart';
 import 'package:flutter_ecom_app_customer/pages/launcher_page.dart';
 import 'package:flutter_ecom_app_customer/providers/user_provider.dart';
 import 'package:flutter_ecom_app_customer/themes/font_awesome5_icons.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import '../../database/auth/auth_service.dart';
 import '../../utils/helper_functions.dart';
@@ -253,13 +254,19 @@ class _LoginPageState extends State<LoginPage> {
         positiveButtonText: 'Send');
   }
 
-  void _login() {
+  void _login() async {
     if (_formKey.currentState!.validate()) {
       EasyLoading.show(status: 'Please wait...', dismissOnTap: false);
       final email = _emailController.text;
       final pass = _passController.text;
 
-      try {} on FirebaseAuthException catch (error) {
+      try {
+        final credential = await AuthService.login(email, pass);
+        EasyLoading.dismiss();
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+        }
+      } on FirebaseAuthException catch (error) {
         EasyLoading.dismiss();
         setState(() {
           _errMsg = error.message!;
@@ -268,29 +275,66 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _register() {}
+  void _register() async {
+    if (_formKey.currentState!.validate()) {
+      EasyLoading.show(status: 'Please wait...', dismissOnTap: false);
+      final email = _emailController.text;
+      final pass = _passController.text;
+      try {
+        if (AuthService.currentUser != null &&
+            AuthService.currentUser!.isAnonymous) {
+          final credential =
+              EmailAuthProvider.credential(email: email, password: pass);
+          _linkWithCredentialAndCreateUser(credential);
+        } else {
+          final credential = await AuthService.register(email, pass);
+          final userModel = UserModel(
+            userId: credential.user!.uid,
+            email: credential.user!.email!,
+            userCreationTime:
+                Timestamp.fromDate(credential.user!.metadata.creationTime!),
+          );
+          await userProvider.addUser(userModel);
+          EasyLoading.dismiss();
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+          }
+        }
+      } on FirebaseAuthException catch (error) {
+        EasyLoading.dismiss();
+        setState(() {
+          _errMsg = error.message!;
+        });
+      }
+    }
+  }
 
   void _signInWithGoogle() async {
     try {
-      final credential = await AuthService.signInWithGoogle();
-      EasyLoading.show(status: 'Redirecting...');
-      final userExist =
-          await FirebaseDbHelper.doesUserExist(credential.user!.uid);
+            //to convert anonymous into real account
+      if (AuthService.currentUser != null &&
+          AuthService.currentUser!.isAnonymous) {
+        // Google Sign-in
+        // Trigger the authentication flow
+        AuthService.googleUser = await GoogleSignIn().signIn();
 
-      if (!userExist) {
-        final userModel = UserModel(
-          userId: credential.user!.uid,
-          email: credential.user!.email!,
-          displayName: credential.user!.displayName,
-          userImageUrl: credential.user!.photoURL,
-          phone: credential.user!.phoneNumber,
-          userCreationTIme: Timestamp.fromDate(DateTime.now()),
+        // Obtain the auth details from the request
+        final GoogleSignInAuthentication? googleAuth =
+            await AuthService.googleUser?.authentication;
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
         );
-        await userProvider.addUser(userModel);
-      }
-      EasyLoading.dismiss();
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+        _linkWithCredentialAndCreateUser(credential);
+      } else {
+        // to signup new account with google account login
+        final userCredential = await AuthService.signInWithGoogle();
+        EasyLoading.show(status: 'Redirecting...');
+        saveUserInfoIfNotExist(userCredential);
+        EasyLoading.dismiss();
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+        }
       }
     } catch (error) {
       EasyLoading.dismiss();
@@ -298,9 +342,61 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<void> saveUserInfoIfNotExist(UserCredential credential) async {
+    final userExist =
+        await FirebaseDbHelper.doesUserExist(credential.user!.uid);
+
+    if (!userExist) {
+      final userModel = UserModel(
+        userId: credential.user!.uid,
+        email: credential.user!.email!,
+        displayName: credential.user!.displayName,
+        userImageUrl: credential.user!.photoURL,
+        phone: credential.user!.phoneNumber,
+        userCreationTime: Timestamp.fromDate(DateTime.now()),
+      );
+      return userProvider.addUser(userModel);
+    }
+  }
+
   void _loginAnonymously() {
     AuthService.loginAsGuest().then((value) {
       Navigator.pushReplacementNamed(context, LauncherPage.routeName);
     });
+  }
+
+  void _linkWithCredentialAndCreateUser(AuthCredential credential) async {
+    try {
+      final userCredential = await FirebaseAuth.instance.currentUser
+          ?.linkWithCredential(credential);
+      if (userCredential?.user != null) {
+        saveUserInfoIfNotExist(userCredential!);
+        EasyLoading.dismiss();
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      EasyLoading.dismiss();
+      switch (e.code) {
+        case "provider-already-linked":
+          _errMsg = "The provider has already been linked to the user.";
+          print(_errMsg);
+          break;
+        case "invalid-credential":
+          _errMsg = "The provider's credential is not valid.";
+          print(_errMsg);
+          break;
+        case "credential-already-in-use":
+          _errMsg =
+              "The account corresponding to the credential already exists or is already linked to a Firebase User";
+          print(_errMsg);
+          break;
+        // See the API reference for the full list of error codes.
+        default:
+          _errMsg = "Unknown error.{${e.toString()}}";
+          print(_errMsg);
+      }
+    }
   }
 }

@@ -17,7 +17,7 @@ class UserModel {
   String? userId;
   String? displayName;
   AddressModel? addressModel;
-  Timestamp? userCreationTIme;
+  Timestamp? userCreationTime;
   String? userImageUrl;
   String? gender;
   String? dob;
@@ -28,7 +28,7 @@ class UserModel {
     this.userId,
     this.displayName,
     this.addressModel,
-    this.userCreationTIme,
+    this.userCreationTime,
     this.userImageUrl,
     this.gender,
     this.dob,
@@ -41,7 +41,7 @@ class UserModel {
       userFieldUserId: userId,
       userFieldUserDisplayName: displayName,
       userFieldUserAddress: addressModel?.toMap(),
-      userFieldUserCreationTime: userCreationTIme,
+      userFieldUserCreationTime: userCreationTime,
       userFieldUserImageUrl: userImageUrl,
       userFieldUserGender: gender,
       userFieldUserDOB: dob,
@@ -57,7 +57,7 @@ class UserModel {
       addressModel: map[userFieldUserAddress] == null
           ? null
           : AddressModel.fromMap(map[userFieldUserAddress]),
-      userCreationTIme: map[userFieldUserCreationTime],
+      userCreationTime: map[userFieldUserCreationTime],
       userImageUrl: map[userFieldUserImageUrl],
       gender: map[userFieldUserGender],
       dob: map[userFieldUserDOB],

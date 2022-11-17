@@ -9,6 +9,7 @@ import 'package:flutter_ecom_app_customer/themes/font_awesome5_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/widget_functions.dart';
+import '../auth_pages/phone_otp_verify_page.dart';
 
 class UserProfilePage extends StatefulWidget {
   static const String routeName = '/profile';
@@ -69,11 +70,22 @@ class _UserProfilePageState extends State<UserProfilePage> {
             children: [
               _headerSection(context, userProvider),
               ListTile(
-                leading: Icon(FontAwesome5.phone_2),
+                leading: const Icon(FontAwesome5.phone_2),
                 title: Text(userProvider.userModel!.phone ?? 'Not set yet'),
                 trailing: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    showSingleTextInputDialog(
+                      context: context,
+                      title: 'Mobile Number',
+                      hint: 'With country code (e.g. +88)',
+                      onSubmit: (value) {
+                        Navigator.pushNamed(
+                            context, OtpVerificationPage.routeName,
+                            arguments: value);
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.edit),
                 ),
               ),
               ListTile(
@@ -188,7 +200,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Container _headerSection(BuildContext context, UserProvider userProvider) {
     return Container(
       height: 150,
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.primary,
       child: Row(
         children: [
           Card(
